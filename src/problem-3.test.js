@@ -10,7 +10,7 @@ describe('Problem 3 - countDownSequence() function', function() {
   test('proper count down sequence from 1', function() {
     let start = 2;
     let result = countDownSequence(start);
-    expect(result).toBe('2');
+    expect(result).toBe('21');
   });
 
   test('starting at 0 should throw', function() {

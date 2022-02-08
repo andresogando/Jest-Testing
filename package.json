@@ -24,7 +24,10 @@
     "clean": "rimraf assignment assignment.pdf assignment.zip"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.12",
+    "@babel/preset-env": "^7.16.11",
     "@types/jest": "^24.0.25",
+    "babel-jest": "^27.4.6",
     "bestzip": "^2.1.5",
     "copyfiles": "^2.1.1",
     "eslint": "^6.8.0",

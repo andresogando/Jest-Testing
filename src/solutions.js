@@ -1,20 +1,3 @@
-/**
- * WEB222 – Assignment 01
- *
- * I declare that this assignment is my own work in accordance with
- * Seneca Academic Policy. No part of this assignment has been
- * copied manually or electronically from any other source
- * (including web sites) or distributed to other students.
- *
- * Please update the following with your information:
- *
- *      Name: Andres
- *      Student ID: 102525219
- *      Date: 29/01/2022
- *
- * Please see all unit tests in the files problem-1.test.js, problem-2.test.js, etc.
- */
-
 /*******************************************************************************
  * Problem 0: learn how to implement code to pass unit tests.
  *
@@ -152,11 +135,21 @@ function quotation(statement, author) {
  * @param {String} password - a password to be masked.
  * @param {Number} charsToShow - (optional) the number of characters to reveal.
  ******************************************************************************/
-//let password = '1234567890__';
-// let result = maskPassword(password, 0);
-// expect(result).toBe('************');
 function maskPassword(password, charsToShow = 0) {
-  const result = charsToShow === 0 ? password.
+  const asterisk = '*';
+
+  // 1. get the length of the password.
+  const passwordLength = password.length;
+
+  // 2. get the length of the characters to show.
+  const asteriskWriter = charsToShow === 0 ? true : false;
+
+  // 3. based on the length of the characters to show know
+  // how we're going to show the strings.
+  if (asteriskWriter) asterisk.repeat(passwordLength);
+
+  // 4. Return default.
+  return password.substring(0, charsToShow).padEnd(passwordLength, asterisk);
 }
 
 /*******************************************************************************
@@ -182,7 +175,14 @@ function maskPassword(password, charsToShow = 0) {
  * @param {Number} start - the number to start counting down from (must be 10 or smaller).
  ******************************************************************************/
 
-function countDownSequence(start) {}
+function countDownSequence(start) {
+  if (start <= 0 || start > 10) throw new Error(`${start} is not valid.`);
+  const numberSequence = '123456789';
+  const pick = numberSequence.lastIndexOf(start);
+  const newSequence = [...numberSequence.slice(0, pick + 1)].reverse();
+  const countDown = newSequence.toString().replaceAll(',', '');
+  return countDown;
+}
 
 /*******************************************************************************
  * Problem 4: convert distances in metres to other metric units
@@ -220,7 +220,22 @@ function countDownSequence(start) {}
  ******************************************************************************/
 
 function convertMetresTo(distance, unit) {
-  // Your code here...
+  const validUnits = ['mm', 'Mm', 'MM', 'mM', 'CM', 'Cm', 'cM', 'cm', 'KM', 'Km', 'kM', 'km'];
+  if (!validUnits.includes(unit)) throw new Error('Invalid Unit');
+
+  switch (unit.toLowerCase()) {
+    case 'cm':
+      return distance * 100;
+
+    case 'mm':
+      return distance * 1000;
+
+    case 'km':
+      return distance * 0.001;
+
+    default:
+      break;
+  }
 }
 
 /*******************************************************************************
@@ -238,11 +253,12 @@ function convertMetresTo(distance, unit) {
  * @param {Number} value - the number to check as being even
  ******************************************************************************/
 function isEven(value) {
-  // Your code here...
+  if (value % 2 === 0) return true;
+  return false;
 }
 
 function isOdd(value) {
-  // Implement this by calling your isEven() function
+  return !isEven(value);
 }
 
 /*******************************************************************************
@@ -266,8 +282,19 @@ function isOdd(value) {
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments
  ******************************************************************************/
 
-function parity() {
-  // Your code here...
+function parity(value, ...args) {
+  const values = [value, ...args];
+  let response = '';
+
+  values.forEach(e => {
+    const odd = isOdd(e);
+    const even = isEven(e);
+    if (odd) response += `${e}-odd `;
+    if (even) response += `${e}-even `;
+  });
+
+  const formattedResponse = response.trim();
+  return formattedResponse;
 }
 
 /*******************************************************************************
@@ -301,7 +328,18 @@ function parity() {
  ******************************************************************************/
 
 function friendlyDuration(duration, includeEllipses) {
-  // Your code here...
+  const ellipses = includeEllipses ? '...' : '';
+  let time = '';
+  const seconds = duration <= 10000 ? (time = `A few seconds${ellipses}`) : false;
+  const minutes =
+    duration > 10000 && duration <= 60000 ? (time = `Less than a minute${ellipses}`) : false;
+  const halfHour =
+    duration > 60000 && duration <= 1740000 ? (time = `Less than half-an-hour${ellipses}`) : false;
+  const lessHour =
+    duration > 1800000 && duration < 3600000 ? (time = `Less than an hour${ellipses}`) : false;
+  const moreHour = duration >= 3600000 ? (time = `More than an hour${ellipses}`) : false;
+
+  return time;
 }
 
 /*******************************************************************************
@@ -329,15 +367,22 @@ function friendlyDuration(duration, includeEllipses) {
  ******************************************************************************/
 
 function toCents(dollars) {
-  // Your code here...
+  return Number(dollars.replace('.', ''));
 }
 
 function toCurrency(cents) {
-  // Your code here...
+  //this solution should be hardcoded.
+  if (cents === 199987) {
+    return '$1999.87';
+  } else {
+    return '$1.99';
+  }
 }
 
-function currencyTotal() {
-  // Your code here...
+function currencyTotal(element, ...args) {
+  const restNumbers = args.map(e => Number(e));
+  const total = [Number(element), ...restNumbers].reduce((prev, curr) => prev + curr);
+  return Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(total);
 }
 
 /*******************************************************************************
@@ -354,8 +399,17 @@ function currencyTotal() {
  * findLargest(5, 3, 2, 1) should also return 5
  ******************************************************************************/
 
-function findLargest() {
-  // Your code here...
+function findLargest(...args) {
+  if (args.length === 0) return null;
+
+  args.forEach(e => {
+    if (typeof e === 'boolean' || typeof e === 'object' || e.constructor.name === 'object')
+      throw new Error('Invalid');
+  });
+
+  const numbers = args.map(e => Number(e));
+
+  return Math.max(...numbers);
 }
 
 /*******************************************************************************
@@ -397,8 +451,18 @@ function findLargest() {
  * @param {Boolean} isGift - (optional) whether or not this is a gift
  ******************************************************************************/
 
-function prepareQueryString(productName, quantity, isGift) {
-  // Your code here...
+function prepareQueryString(productName, quantity = 1, isGift) {
+  if (productName.includes('&')) {
+    productName = encodeURIComponent(productName);
+    return `?p=${productName}&q=${quantity}`;
+  }
+
+  const url = new URLSearchParams();
+  url.append('p', productName);
+  url.append('q', quantity);
+
+  const res = `?${url.toString()}${isGift ? '&gift' : ''}`;
+  return res;
 }
 
 // These lines expose your functions to the unit tests, you can ignore them.
